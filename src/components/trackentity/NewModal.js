@@ -6,19 +6,20 @@ import {
   ModalActions,
   Field,
   InputField,
-  Button
+  Button,
+   SingleSelect,
+  SingleSelectOption
 } from "@dhis2/ui";
 import { useDataMutation } from "@dhis2/app-runtime";
 
 const NewModal = ({ handleClick }) => {
 
-  
-
+   const [valueType, setValuetype] = useState("");
+  const [aggregationType, setAggregationType] = useState("");
   const [state, setState] = useState({
     name: "",
-    shortName: "",
-    valueType: "",
-    aggregationTyp: ""
+    shortName: ""
+    
   
   } )
 
@@ -35,6 +36,7 @@ const NewModal = ({ handleClick }) => {
     setShowModal(false);
   };
   function handleChange(evt) {
+	   
     const value = evt.value;
     setState({
       ...state,
@@ -67,25 +69,68 @@ const NewModal = ({ handleClick }) => {
           onChange={handleChange}
         />
         </Field>
+        value Type
         <Field>
-        <InputField
-          label="value Type"
-          name="valueType"
-          value={state.valueType}
-          onChange={handleChange}
-        />
+          <SingleSelect
+            className="select"
+            label="valueType"
+            name="valueType"
+            onChange={({ selected }) => setValuetype(selected)}
+            selected={valueType}
+          >
+            <SingleSelectOption
+              dataTest="dhis2-uiwidgets-singleselectfield"
+              key="NUMBER"
+              label="NUMBER"
+              value="NUMBER"
+            />
+            <SingleSelectOption
+              dataTest="dhis2-uiwidgets-singleselectfield"
+              key="TEXT"
+              label="TEXT"
+              value="TEXT"
+            />
+          </SingleSelect>
         </Field>
-        <Field>
-        <InputField
-          label="Aggregation Type"
-          name="aggregationType"
-          value={state.aggregationType}
-          onChange={handleChange}
-        />
+		
+		
+		
+		Aggragation Type
+		<Field>
+          <SingleSelect
+            className="select"
+            label="AggragationType"
+            name="aggregationType"
+            dataTest="dhis2-uiwidgets-singleselectfield"
+            //  selected={selected}
+            // onChange={(value) => handleSelectOption(value)}
+            onChange={({ selected }) => setAggregationType(selected)}
+            selected={aggregationType}
+          >
+            <SingleSelectOption
+              dataTest="dhis2-uiwidgets-singleselectfield"
+              key="NONE"
+              label="NONE"
+              value="NONE"
+            />
+            <SingleSelectOption
+              dataTest="dhis2-uiwidgets-singleselectfield"
+              key="SUM"
+              label="SUM"
+              value="SUM"
+            />
+			<SingleSelectOption
+              dataTest="dhis2-uiwidgets-singleselectfield"
+              key="MAX"
+              label="MAX"
+              value="MAX"
+            />
+          </SingleSelect>
         </Field>
+        
       </ModalContent>
       <ModalActions>
-        <Button primary type="button" onClick={() => handleClick(state.name, state.shortName, state.valueType, state.aggregationType)}>
+        <Button primary type="button" onClick={() => handleClick(state.name, state.shortName, valueType, aggregationType)}>
           Update
         </Button>
       </ModalActions>
