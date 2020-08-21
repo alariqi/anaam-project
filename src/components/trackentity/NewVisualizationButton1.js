@@ -13,65 +13,38 @@ import NewModal from "./NewModal";
     aggregationType: "NONE"
 
   }*/
-
+let attributes = [];
 const mutation = {
   resource: 'trackedEntityAttributes',
   type: 'create',
-  data: ({  name, shortName, valueType, aggregationType }) => ({
-    name, shortName, valueType, aggregationType
-  }),
-}
-/*const mutation = {
-  resource: 'trackedEntityAttributes',
-  type: 'create',
-  data: ( newname ,  newshortName ,  newvalueType , newaggregationType) => 
-    ({ name: newname }, { shortName: newshortName }, { valueType: newvalueType }, { aggregationType: newaggregationType } )
-  //data: { {name}, {shortName}, {valueType}, {aggregationType} }
-
-
+  data: ({ attributes }) => attributes
 };
-*/
 
 
-const NewVisualizationButton1 = ({ name, shortName, valueType, aggregationType, refetch }) => {
-  
-  
-  const [showModal, setShowModal] = useState(false);
-  
-  //console.log(state);
-  //const [mutate, { loading }] = useDataMutation(mutation);
-
-  const [mutate, { called, loading, error, data }] = useDataMutation(mutation, {
-    onComplete: (ew) => console.log(ew),
-    onError: err => console.log(err),
-    variables: {
-      resource: "trackedEntityAttributes",
-      type: "create",
-      name: name,
-      shortName: shortName,
-      valueType: valueType,
-      aggregationType: aggregationType
-      
-    }
-  }
-  )
-
-
-
-
-  const handleClick222 = (newname, newshortName, newvalueType, newaggregationType) => {
-  
+const NewVisualizationButton1 = ({refetch}) => {
     
-    mutate();
-    refetch();
+  const [showModal, setShowModal] = useState(false);
+  const [mutate, { loading }] = useDataMutation(mutation);
+ 
+  const handleClick = async(newname, newshortName, newvalueType, newaggregationType) => {
+    
+       
+    attributes = {
+
+      name: newname,
+      shortName: newshortName,
+      valueType: newvalueType,
+      aggregationType: newaggregationType
+    };
+  
+    await mutate({
+      attributes: attributes
+     }).then(refetch);
+    //refetch();
     setShowModal(false);
   };
-  /*const handleClick = newName => {
-    mutate({ id, newName }).then(refetch);
-    setShowModal(false);
-  };*/
-
-  const handleClick = () => {
+ 
+  const handleClickold = () => {
      mutate();
     refetch();
     setShowModal(false);
@@ -83,7 +56,7 @@ const NewVisualizationButton1 = ({ name, shortName, valueType, aggregationType, 
       {showModal && (
         <NewModal  handleClick={handleClick} />
       )}
-      <Button primary disabled={loading} onClick={() => setShowModal(true)}>
+      <Button primary disabled={loading} onClick={() => setShowModal(true) }>
         New trackedEntityAttributes
       </Button>
     </div>
